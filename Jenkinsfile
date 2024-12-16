@@ -1,8 +1,8 @@
 pipeline {
     agent any
     tools {
-        mave: "MAVEN3"
-        jdk: "OracleJDK17"
+        maven "MAVEN3"
+        jdk "OracleJDK17"
     }
     environment {
         SNAP_REPO = 'vprofile-snapshot'
@@ -16,8 +16,11 @@ pipeline {
         NEXUS_LOGIN = 'nexuslogin'
     }
     stages {
-        steps {
+        stage('Build') {
+          steps {
             sh 'mvn -s settings.xml -DskipTests install'
+                 }
         }
+
     }
 }
