@@ -41,6 +41,7 @@ pipeline {
             environment {
                 scannerHome = tool "${SONARSCANNER}"
             }
+            // adding sonarQube
 
             steps {
                 withSonarQubeEnv("${SONARSERVER}") {
