@@ -86,7 +86,7 @@ pipeline {
                         [
                             artifactId: 'vprofile',
                             classifier: '',
-                            file: 'target/vprofile-v3.war',
+                            file: 'target/vprofile-v2.war',
                             type: 'war'
                         ]
                     ]
