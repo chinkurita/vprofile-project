@@ -22,6 +22,13 @@ pipeline {
           steps {
             sh 'mvn -s settings.xml -DskipTests install'
                  }
+            
+            post {
+                success {
+                    echo "new archiving"
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
         }
 
         stage('Test') {
@@ -62,6 +69,28 @@ pipeline {
                 timeout(time:1, unit:'HOURS') {
                     waitForQualityGate abortPipeline: true
                 }
+            }
+        }
+
+        stage('Upload Artifact') {
+            steps {
+                nexusArtifactUploader (
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
+                    groupId: 'QA',
+                    version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                    repository: "${RELEASE_REPO}",
+                    credentialsId: "${NEXUS_LOGIN}",
+                    artifacts: [
+                        [
+                            artifactId: 'vprofile',
+                            classifier: '',
+                            file: 'target/vprofile-v3.war',
+                            type: 'war'
+                        ]
+                    ]
+                ) 
             }
         }
 
